@@ -17,6 +17,11 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     url='http://github.com/aeroxis/sultan',
+    entry_points={
+        'console_scripts': [
+            'rules=sultan.main:rules'
+        ]
+    },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",

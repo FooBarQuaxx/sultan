@@ -188,7 +188,13 @@ class Sultan(Base):
                 universal_newlines=True).communicate()
 
             if stdout:
-                return stdout.strip().splitlines()
+                result = stdout.strip().splitlines()
+                if quiet or q:
+                    return result
+
+                for line in result:
+                    self.__echo.info(line)
+                return result
 
             if stderr:
                 self.__echo.critical("--{ STDERR }---" + "-" * 100)
