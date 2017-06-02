@@ -27,19 +27,32 @@ class rule(object):
         }
 
 
-def discover_rules():
+def discover_rules(cwd=None):
 
-    for root, dirs, files in os.walk(os.getcwd()):
+    if cwd == None:
+        cwd = os.getcwd()
 
-        if 'Rulesfile' not in files:
+    discovered = []
+    for root, dirs, files in os.walk(cwd):
+
+        if ('Rulesfile' not in files) and ('Rulefile' not in files):
             continue
 
         # determine the path to the 
         abs_path = os.path.join(root, 'Rulesfile')
+        if not os.path.exists(abs_path):
+            abs_path = os.path.join(root, 'Rulefile')
+
+        discovered.append(abs_path)
         with open(abs_path) as f:
             contents = f.read()
             exec(contents, globals())
-    return RULES
+
+    if len(discovered) > 0:
+        return RULES
+    else:
+        click.secho("There are no 'Rulesfile' files. Please create a new 'Rulesfile'", fg='red')
+        return {}
 
 def run(name):
 

@@ -3,22 +3,24 @@ from sultan.rules import (discover_rules, run)
 
 
 @click.command()
-@click.argument('command')
-def rules(command):
+@click.argument('commands', nargs=-1)
+def rules(commands):
     """
     Run 'rules help' to display help.
     """
-    if command in ('list', 'show'):
-        show_rules()
-        return
+    for command in commands:
+        
+        if command in ('list', 'show'):
+            show_rules()
+            return
 
-    if command in ('help'):
-        help()
-        return
-    
-    # if nothing else is provided
-    discover_rules()
-    run(command)
+        if command in ('help'):
+            help()
+            return
+        
+        # if nothing else is provided
+        discover_rules()
+        run(command)
 
 def help():
     """
@@ -49,9 +51,9 @@ def show_rules():
         description = attributes.get('description')
         env = attributes.get('env')
 
-        row('Name: %s' % name)
+        row('  Task Name: %s' % name)
         row('Description: %s' % description)
-        row('Env: %s' % env)
+        row('Environment: %s' % env.upper())
         count += 1
         if count <= total:
             click.secho('+' + '-'*80 + '+', fg='magenta')
